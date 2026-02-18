@@ -1,1 +1,78 @@
-/* We'll add our styles here */
+:root {
+    /* ── Colors: Background & Surface ── */
+    --color-bg: #0e0e10;
+    --color-surface: #1a1a1f;
+    --color-surface-raised: #242429;
+
+    /* ── Colors: Text ── */
+    --color-text: #e8e6e3;
+    --color-text-muted: #9a9a9e;
+    --color-text-inverse: #0e0e10;
+
+    /* ── Colors: Work Mode (red-orange) ── */
+    --color-work: #e8643a;
+    --color-work-dim: #b34425;
+    --color-work-glow: rgba(232, 100, 58, 0.25);
+
+    /* ── Colors: Break Mode (blue-green) ── */
+    --color-break: #38b2a3;
+    --color-break-dim: #268079;
+    --color-break-glow: rgba(56, 178, 163, 0.25);
+
+    /* ── Colors: Accent / Interactive ── */
+    --color-accent: #7b8cff;
+    --color-accent-dim: #5563c4;
+
+    /* ── Colors: Semantic ── */
+    --color-danger: #e8643a;
+    --color-success: #38b2a3;
+
+    /* ── Colors: Border ── */
+    --color-border: #2e2e35;
+    --color-border-focus: #7b8cff;
+
+    /* ── Spacing Scale ── */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+
+    /* ── Typography: Font Families ── */
+    --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'Overpass Mono', 'Fira Code', 'Courier New', monospace;
+
+    /* ── Typography: Font Sizes ── */
+    --text-xs: 0.75rem;
+    /* 12px */
+    --text-sm: 0.875rem;
+    /* 14px */
+    --text-base: 1rem;
+    /* 16px */
+    --text-lg: 1.25rem;
+    /* 20px */
+    --text-xl: 1.5rem;
+    /* 24px */
+    --text-2xl: 2rem;
+    /* 32px */
+    --text-timer: 4.5rem;
+    /* 72px — main countdown display */
+
+    /* ── Typography: Font Weights ── */
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* ── Typography: Line Heights ── */
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.75;
+
+    /* ── Border Radius ── */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+}
