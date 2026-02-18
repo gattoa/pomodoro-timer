@@ -76,3 +76,108 @@
     --radius-xl: 16px;
     --radius-full: 9999px;
 }
+
+/* ── Base ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Timer Container ── */
+.timer-container {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+}
+
+/* ── Mode Indicator ── */
+.mode-indicator {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+    transition: color 0.3s;
+}
+
+/* ── Mode Themes ── */
+#app[data-mode="work"] .mode-indicator {
+    color: var(--color-work);
+}
+
+#app[data-mode="work"] .time-display {
+    color: var(--color-work);
+    text-shadow: 0 0 32px var(--color-work-glow);
+}
+
+#app[data-mode="break"] .mode-indicator {
+    color: var(--color-break);
+}
+
+#app[data-mode="break"] .time-display {
+    color: var(--color-break);
+    text-shadow: 0 0 32px var(--color-break-glow);
+}
+
+/* ── Time Display ── */
+.time-display {
+    font-family: var(--font-mono);
+    font-size: var(--text-timer);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    color: var(--color-text);
+    margin-bottom: var(--space-xl);
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* ── Controls ── */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+}
+
+/* ── Buttons ── */
+.btn {
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-text-inverse);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent-dim);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-text-muted);
+}
