@@ -7,7 +7,16 @@
     <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <div class="timer-container">
+            <div id="mode-indicator" class="mode-indicator">Focus</div>
+            <div id="time-display" class="time-display">25:00</div>
+            <div class="controls">
+                <button id="start-pause-btn" class="btn btn-primary">Start</button>
+                <button id="reset-btn" class="btn btn-secondary">Reset</button>
+            </div>
+        </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
 </body>
 </html>

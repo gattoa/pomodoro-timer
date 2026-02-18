@@ -1,1 +1,183 @@
-/* We'll add our styles here */
+:root {
+    /* ── Colors: Background & Surface ── */
+    --color-bg: #0e0e10;
+    --color-surface: #1a1a1f;
+    --color-surface-raised: #242429;
+
+    /* ── Colors: Text ── */
+    --color-text: #e8e6e3;
+    --color-text-muted: #9a9a9e;
+    --color-text-inverse: #0e0e10;
+
+    /* ── Colors: Work Mode (red-orange) ── */
+    --color-work: #e8643a;
+    --color-work-dim: #b34425;
+    --color-work-glow: rgba(232, 100, 58, 0.25);
+
+    /* ── Colors: Break Mode (blue-green) ── */
+    --color-break: #38b2a3;
+    --color-break-dim: #268079;
+    --color-break-glow: rgba(56, 178, 163, 0.25);
+
+    /* ── Colors: Accent / Interactive ── */
+    --color-accent: #7b8cff;
+    --color-accent-dim: #5563c4;
+
+    /* ── Colors: Semantic ── */
+    --color-danger: #e8643a;
+    --color-success: #38b2a3;
+
+    /* ── Colors: Border ── */
+    --color-border: #2e2e35;
+    --color-border-focus: #7b8cff;
+
+    /* ── Spacing Scale ── */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+
+    /* ── Typography: Font Families ── */
+    --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'Overpass Mono', 'Fira Code', 'Courier New', monospace;
+
+    /* ── Typography: Font Sizes ── */
+    --text-xs: 0.75rem;
+    /* 12px */
+    --text-sm: 0.875rem;
+    /* 14px */
+    --text-base: 1rem;
+    /* 16px */
+    --text-lg: 1.25rem;
+    /* 20px */
+    --text-xl: 1.5rem;
+    /* 24px */
+    --text-2xl: 2rem;
+    /* 32px */
+    --text-timer: 4.5rem;
+    /* 72px — main countdown display */
+
+    /* ── Typography: Font Weights ── */
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* ── Typography: Line Heights ── */
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.75;
+
+    /* ── Border Radius ── */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+}
+
+/* ── Base ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Timer Container ── */
+.timer-container {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+}
+
+/* ── Mode Indicator ── */
+.mode-indicator {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+    transition: color 0.3s;
+}
+
+/* ── Mode Themes ── */
+#app[data-mode="work"] .mode-indicator {
+    color: var(--color-work);
+}
+
+#app[data-mode="work"] .time-display {
+    color: var(--color-work);
+    text-shadow: 0 0 32px var(--color-work-glow);
+}
+
+#app[data-mode="break"] .mode-indicator {
+    color: var(--color-break);
+}
+
+#app[data-mode="break"] .time-display {
+    color: var(--color-break);
+    text-shadow: 0 0 32px var(--color-break-glow);
+}
+
+/* ── Time Display ── */
+.time-display {
+    font-family: var(--font-mono);
+    font-size: var(--text-timer);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    color: var(--color-text);
+    margin-bottom: var(--space-xl);
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* ── Controls ── */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+}
+
+/* ── Buttons ── */
+.btn {
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-text-inverse);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent-dim);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-text-muted);
+}
