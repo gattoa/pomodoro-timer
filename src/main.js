@@ -51,12 +51,59 @@ const appTitle = document.getElementById('app-title');
 const timeDisplay = document.getElementById('time-display');
 const startPauseBtn = document.getElementById('start-pause-btn');
 const resetBtn = document.getElementById('reset-btn');
+const mainEl = document.querySelector('.main');
 const sessionHistoryEl = document.getElementById('session-history');
 
 let timeRemaining = workDuration;
 let isRunning = false;
 let currentMode = 'work';
 let intervalId = null;
+
+// ── Hourglass color ranges ──
+// Start colors match --color-work / --color-break so title and fill are in sync
+// Focus: red-orange → deep crimson | Break: teal → emerald green
+const HOURGLASS_COLORS = {
+    work: { start: [232, 100, 58], end: [204, 44, 44] },
+    break: { start: [56, 178, 163], end: [46, 204, 113] },
+};
+
+function lerpColor(a, b, t) {
+    const r = Math.round(a[0] + (b[0] - a[0]) * t);
+    const g = Math.round(a[1] + (b[1] - a[1]) * t);
+    const bl = Math.round(a[2] + (b[2] - a[2]) * t);
+    return `rgb(${r}, ${g}, ${bl})`;
+}
+
+function hourglassEase(timeRemaining) {
+    // Three phases:
+    //   1. Bulk of countdown: barely shifts       (0 → 0.10)
+    //   2. 30s → 15s: subtle warmup               (0.10 → 0.25)
+    //   3. Final 15s: dramatic, urgent color shift (0.25 → 1.0)
+    const total = currentMode === 'work' ? workDuration : breakDuration;
+
+    if (timeRemaining > 30) {
+        const t = 1 - ((timeRemaining - 30) / (total - 30));
+        return t * 0.10;
+    }
+    if (timeRemaining > 15) {
+        const t = 1 - ((timeRemaining - 15) / 15);
+        return 0.10 + t * 0.15;
+    }
+    // Final 15s: cubic ease-in for aggressive ramp
+    const t = 1 - (timeRemaining / 15);
+    const eased = t * t * t;
+    return 0.25 + eased * 0.75;
+}
+
+function updateHourglass() {
+    const total = currentMode === 'work' ? workDuration : breakDuration;
+    const pct = timeRemaining / total;
+    const colorProgress = hourglassEase(timeRemaining);
+    const colors = HOURGLASS_COLORS[currentMode];
+    const color = lerpColor(colors.start, colors.end, colorProgress);
+    mainEl.style.setProperty('--fill-pct', pct);
+    mainEl.style.setProperty('--fill-color', color);
+}
 
 function formatTime(seconds) {
     const m = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -90,6 +137,7 @@ function updateDisplay() {
     startPauseBtn.classList.toggle('btn-icon--paused', !isRunning);
     timeDisplay.classList.toggle('time-display--paused', !isRunning);
     renderDots();
+    updateHourglass();
 }
 
 function switchMode() {
@@ -97,6 +145,14 @@ function switchMode() {
     saveHistory();
     currentMode = currentMode === 'work' ? 'break' : 'work';
     timeRemaining = currentMode === 'work' ? workDuration : breakDuration;
+
+    // Instant refill: skip the grow-back animation, keep color dissolve
+    mainEl.classList.add('hourglass-refill');
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            mainEl.classList.remove('hourglass-refill');
+        });
+    });
 }
 
 function tick() {
