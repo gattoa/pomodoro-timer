@@ -176,9 +176,13 @@ body {
     );
     transform: scaleY(var(--fill-pct, 1));
     transform-origin: bottom center;
-    transition: transform 1s linear, background 0.4s ease;
+    transition: transform 1s linear, background 0.4s ease, opacity 0.3s ease;
     will-change: transform;
     pointer-events: none;
+}
+
+.main--paused::before {
+    opacity: 0.35;
 }
 
 .main.hourglass-refill::before {
@@ -219,9 +223,6 @@ body {
     transition: color 0.3s, text-shadow 0.3s, opacity 0.3s;
 }
 
-.time-display--paused {
-    opacity: 0.35;
-}
 
 /* ── Buttons ── */
 .btn {

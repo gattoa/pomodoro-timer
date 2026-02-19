@@ -135,7 +135,7 @@ function updateDisplay() {
     document.getElementById('icon-pause').style.display = isRunning ? '' : 'none';
     startPauseBtn.setAttribute('aria-label', isRunning ? 'Pause' : 'Start');
     startPauseBtn.classList.toggle('btn-icon--paused', !isRunning);
-    timeDisplay.classList.toggle('time-display--paused', !isRunning);
+    mainEl.classList.toggle('main--paused', !isRunning);
     renderDots();
     updateHourglass();
 }
@@ -173,12 +173,12 @@ function startPause() {
     if (isRunning) {
         clearInterval(intervalId);
         intervalId = null;
-        pauseSfx.currentTime = 0;
-        pauseSfx.play();
-    } else {
-        intervalId = setInterval(tick, 1000);
         resumeSfx.currentTime = 0;
         resumeSfx.play();
+    } else {
+        intervalId = setInterval(tick, 1000);
+        pauseSfx.currentTime = 0;
+        pauseSfx.play();
     }
     isRunning = !isRunning;
     updateDisplay();
