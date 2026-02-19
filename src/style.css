@@ -39,7 +39,7 @@
     --space-xl: 40px;
 
     /* ── Typography: Font Families ── */
-    --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-body: 'Overpass', 'Segoe UI', system-ui, sans-serif;
     --font-mono: 'Overpass Mono', 'Fira Code', 'Courier New', monospace;
 
     /* ── Typography: Font Sizes ── */
