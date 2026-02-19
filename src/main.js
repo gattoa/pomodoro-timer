@@ -84,7 +84,10 @@ function updateDisplay() {
     timeDisplay.textContent = formatTime(timeRemaining);
     appTitle.textContent = modeLabel;
     app.dataset.mode = currentMode;
-    startPauseBtn.textContent = isRunning ? 'Pause' : 'Start';
+    document.getElementById('icon-play').style.display = isRunning ? 'none' : '';
+    document.getElementById('icon-pause').style.display = isRunning ? '' : 'none';
+    startPauseBtn.setAttribute('aria-label', isRunning ? 'Pause' : 'Start');
+    startPauseBtn.classList.toggle('btn-icon--paused', !isRunning);
     timeDisplay.classList.toggle('time-display--paused', !isRunning);
     renderDots();
 }

@@ -205,13 +205,36 @@ body {
     transition: background-color 0.2s, border-color 0.2s;
 }
 
-.btn-primary {
-    background-color: var(--color-accent);
-    color: var(--color-text-inverse);
+.btn-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    padding: 0;
+    transition: border-color 0.2s, color 0.2s;
 }
 
-.btn-primary:hover {
-    background-color: var(--color-accent-dim);
+/* Running state: subdued, brightens fully on hover */
+.btn-icon:hover {
+    border-color: rgba(255, 255, 255, 1);
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Paused state: icon prominent, border stays subtle */
+.btn-icon--paused {
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-icon--paused:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 1);
 }
 
 .btn-ghost {
