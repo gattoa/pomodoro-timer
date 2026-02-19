@@ -11,6 +11,7 @@ const completedSfx = new Audio(completedSrc);
 const collectedSfx = new Audio(collectedSrc);
 
 const STORAGE_KEY = 'pomodoro-settings';
+const HISTORY_KEY = 'pomodoro-history';
 
 function loadSettings() {
     try {
@@ -28,15 +29,29 @@ function clearSettings() {
     localStorage.removeItem(STORAGE_KEY);
 }
 
+function loadHistory() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(HISTORY_KEY));
+        if (Array.isArray(saved)) return saved;
+    } catch { /* ignore */ }
+    return [];
+}
+
+function saveHistory() {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(sessionHistory));
+}
+
 const initialSettings = loadSettings();
 let workDuration = initialSettings.workMinutes * 60;
 let breakDuration = initialSettings.breakMinutes * 60;
+let sessionHistory = loadHistory();
 
 const app = document.getElementById('app');
 const appTitle = document.getElementById('app-title');
 const timeDisplay = document.getElementById('time-display');
 const startPauseBtn = document.getElementById('start-pause-btn');
 const resetBtn = document.getElementById('reset-btn');
+const sessionHistoryEl = document.getElementById('session-history');
 
 let timeRemaining = workDuration;
 let isRunning = false;
@@ -49,6 +64,21 @@ function formatTime(seconds) {
     return `${m}:${s}`;
 }
 
+function renderDots() {
+    sessionHistoryEl.innerHTML = '';
+    sessionHistory.forEach(session => {
+        const dot = document.createElement('div');
+        dot.className = `session-dot session-dot--${session.type}`;
+        sessionHistoryEl.appendChild(dot);
+    });
+    const fullDuration = currentMode === 'work' ? workDuration : breakDuration;
+    if (isRunning || timeRemaining < fullDuration) {
+        const activeDot = document.createElement('div');
+        activeDot.className = 'session-dot session-dot--active';
+        sessionHistoryEl.appendChild(activeDot);
+    }
+}
+
 function updateDisplay() {
     const modeLabel = currentMode === 'work' ? 'Focus' : 'Break';
     timeDisplay.textContent = formatTime(timeRemaining);
@@ -56,9 +86,12 @@ function updateDisplay() {
     app.dataset.mode = currentMode;
     startPauseBtn.textContent = isRunning ? 'Pause' : 'Start';
     timeDisplay.classList.toggle('time-display--paused', !isRunning);
+    renderDots();
 }
 
 function switchMode() {
+    sessionHistory.push({ type: currentMode });
+    saveHistory();
     currentMode = currentMode === 'work' ? 'break' : 'work';
     timeRemaining = currentMode === 'work' ? workDuration : breakDuration;
 }
@@ -97,6 +130,8 @@ function reset() {
     intervalId = null;
     isRunning = false;
     clearSettings();
+    sessionHistory = [];
+    localStorage.removeItem(HISTORY_KEY);
     workDuration = 25 * 60;
     breakDuration = 5 * 60;
     currentMode = 'work';
