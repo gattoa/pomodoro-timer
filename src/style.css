@@ -373,3 +373,89 @@ body {
     color: #fff;
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
 }
+
+/* ── Theme Toggle ── */
+.btn-theme-toggle {
+    font-size: var(--text-lg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Day Theme ── */
+#app[data-theme="day"] {
+    --color-bg: #f5f2ee;
+    --color-surface: #ebe7e1;
+    --color-surface-raised: #e0dbd4;
+    --color-text: #2a2825;
+    --color-text-muted: #7a7670;
+    --color-text-inverse: #f5f2ee;
+    --color-work: #d44f22;
+    --color-work-dim: #a83a18;
+    --color-work-glow: rgba(212, 79, 34, 0.2);
+    --color-break: #2a9d8f;
+    --color-break-dim: #1e7568;
+    --color-break-glow: rgba(42, 157, 143, 0.2);
+    --color-accent: #5c6bc0;
+    --color-accent-dim: #3f4fa0;
+    --color-danger: #d44f22;
+    --color-success: #2a9d8f;
+    --color-border: #d5d0c9;
+    --color-border-focus: #5c6bc0;
+}
+
+/* Day theme: hardcoded color overrides */
+#app[data-theme="day"] .btn-icon {
+    border-color: rgba(0, 0, 0, 0.25);
+    color: rgba(0, 0, 0, 0.25);
+}
+
+#app[data-theme="day"] .btn-icon:hover {
+    border-color: rgba(0, 0, 0, 0.8);
+    color: rgba(0, 0, 0, 0.8);
+}
+
+#app[data-theme="day"] .btn-icon--paused {
+    color: rgba(0, 0, 0, 0.7);
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+#app[data-theme="day"] .btn-icon--paused:hover {
+    border-color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.7);
+}
+
+#app[data-theme="day"] .session-dot--work,
+#app[data-theme="day"] .session-dot--break {
+    color: rgba(0, 0, 0, 0.25);
+}
+
+#app[data-theme="day"][data-mode="work"] .session-dot--active,
+#app[data-theme="day"][data-mode="break"] .session-dot--active {
+    color: rgba(0, 0, 0, 0.7);
+    filter: none;
+}
+
+#app[data-theme="day"][data-mode="work"] .time-display,
+#app[data-theme="day"][data-mode="break"] .time-display {
+    color: var(--color-text);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+}
+
+#app[data-theme="day"] .settings-panel {
+    background-color: rgba(245, 242, 238, 0.85);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+body:has(#app[data-theme="day"]) {
+    background-color: #f5f2ee;
+}
+
+#app[data-theme="day"] .main::before {
+    background: linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--fill-color), white 15%) 0%,
+        var(--fill-color) 40%,
+        color-mix(in srgb, var(--fill-color), black 5%) 100%
+    );
+}

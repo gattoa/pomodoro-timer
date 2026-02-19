@@ -12,6 +12,7 @@ const collectedSfx = new Audio(collectedSrc);
 
 const STORAGE_KEY = 'pomodoro-settings';
 const HISTORY_KEY = 'pomodoro-history';
+const THEME_KEY = 'pomodoro-theme';
 
 function loadSettings() {
     try {
@@ -67,6 +68,11 @@ const HOURGLASS_COLORS = {
     break: { start: [56, 178, 163], end: [46, 204, 113] },
 };
 
+const HOURGLASS_COLORS_DAY = {
+    work: { start: [212, 79, 34], end: [168, 58, 24] },
+    break: { start: [42, 157, 143], end: [30, 117, 104] },
+};
+
 function lerpColor(a, b, t) {
     const r = Math.round(a[0] + (b[0] - a[0]) * t);
     const g = Math.round(a[1] + (b[1] - a[1]) * t);
@@ -99,7 +105,8 @@ function updateHourglass() {
     const total = currentMode === 'work' ? workDuration : breakDuration;
     const pct = timeRemaining / total;
     const colorProgress = hourglassEase(timeRemaining);
-    const colors = HOURGLASS_COLORS[currentMode];
+    const palette = app.dataset.theme === 'day' ? HOURGLASS_COLORS_DAY : HOURGLASS_COLORS;
+    const colors = palette[currentMode];
     const color = lerpColor(colors.start, colors.end, colorProgress);
     mainEl.style.setProperty('--fill-pct', pct);
     mainEl.style.setProperty('--fill-color', color);
@@ -192,12 +199,14 @@ function reset() {
     clearSettings();
     sessionHistory = [];
     localStorage.removeItem(HISTORY_KEY);
+    localStorage.removeItem(THEME_KEY);
     workDuration = 25 * 60;
     breakDuration = 5 * 60;
     currentMode = 'work';
     timeRemaining = workDuration;
     workInput.value = 25;
     breakInput.value = 5;
+    applyTheme('auto');
     updateDisplay();
 }
 
@@ -271,4 +280,49 @@ breakInput.addEventListener('change', () => {
         updateDisplay();
     }
 });
+
+// ── Theme ──
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const themeIconSun = document.getElementById('theme-icon-sun');
+const themeIconMoon = document.getElementById('theme-icon-moon');
+const themeIconAuto = document.getElementById('theme-icon-auto');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+let currentTheme = localStorage.getItem(THEME_KEY) || 'auto';
+
+function applyTheme(mode) {
+    currentTheme = mode;
+    let resolved;
+    if (mode === 'auto') {
+        resolved = prefersDark.matches ? 'night' : 'day';
+    } else {
+        resolved = mode;
+    }
+
+    if (resolved === 'day') {
+        app.dataset.theme = 'day';
+    } else {
+        delete app.dataset.theme;
+    }
+
+    themeIconSun.style.display = mode === 'day' ? '' : 'none';
+    themeIconMoon.style.display = mode === 'night' ? '' : 'none';
+    themeIconAuto.style.display = mode === 'auto' ? '' : 'none';
+
+    updateHourglass();
+}
+
+function cycleTheme() {
+    const order = ['auto', 'day', 'night'];
+    const next = order[(order.indexOf(currentTheme) + 1) % order.length];
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+}
+
+themeToggleBtn.addEventListener('click', cycleTheme);
+prefersDark.addEventListener('change', () => {
+    if (currentTheme === 'auto') applyTheme('auto');
+});
+
+applyTheme(currentTheme);
 
