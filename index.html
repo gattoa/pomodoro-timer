@@ -8,14 +8,37 @@
 </head>
 <body>
     <div id="app">
-        <div class="timer-container">
-            <div id="mode-indicator" class="mode-indicator">Focus</div>
-            <div id="time-display" class="time-display">25:00</div>
-            <div class="controls">
-                <button id="start-pause-btn" class="btn btn-primary">Start</button>
-                <button id="reset-btn" class="btn btn-secondary">Reset</button>
+        <div class="top-bar">
+        <header class="app-header">
+            <div class="app-header-left">
+                <button id="settings-toggle-btn" class="btn btn-ghost">Settings</button>
+            </div>
+            <span id="app-title" class="app-title">Focus</span>
+            <div class="app-header-right">
+                <button id="reset-btn" class="btn btn-ghost btn-ghost--danger">Reset</button>
+            </div>
+        </header>
+
+        <div id="settings-panel" class="settings-panel">
+            <div class="settings-panel__inner">
+                <div class="settings-field">
+                    <label for="work-duration-input" class="settings-label">Work (min)</label>
+                    <input id="work-duration-input" type="number" class="settings-input" value="25" min="1" max="120" />
+                </div>
+                <div class="settings-field">
+                    <label for="break-duration-input" class="settings-label">Break (min)</label>
+                    <input id="break-duration-input" type="number" class="settings-input" value="5" min="1" max="60" />
+                </div>
             </div>
         </div>
+        </div>
+
+        <main class="main">
+            <div class="timer-container">
+                <div id="time-display" class="time-display">25:00</div>
+                <button id="start-pause-btn" class="btn btn-primary">Start</button>
+            </div>
+        </main>
     </div>
     <script type="module" src="/src/main.js"></script>
 </body>
