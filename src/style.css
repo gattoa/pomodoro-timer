@@ -125,7 +125,19 @@ body {
 
 .app-header-left {
     display: flex;
-    justify-content: flex-start;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.settings-saved-msg {
+    font-size: var(--text-xs);
+    color: var(--color-success);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.settings-saved-msg--visible {
+    opacity: 1;
 }
 
 .app-header-right {
