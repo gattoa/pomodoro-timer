@@ -187,7 +187,11 @@ body {
     line-height: var(--leading-tight);
     color: var(--color-text);
     margin-bottom: var(--space-xl);
-    transition: color 0.3s, text-shadow 0.3s;
+    transition: color 0.3s, text-shadow 0.3s, opacity 0.3s;
+}
+
+.time-display--paused {
+    opacity: 0.35;
 }
 
 /* ── Buttons ── */

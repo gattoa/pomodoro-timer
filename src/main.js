@@ -36,6 +36,7 @@ function updateDisplay() {
     appTitle.textContent = modeLabel;
     app.dataset.mode = currentMode;
     startPauseBtn.textContent = isRunning ? 'Pause' : 'Start';
+    timeDisplay.classList.toggle('time-display--paused', !isRunning);
 }
 
 function switchMode() {
