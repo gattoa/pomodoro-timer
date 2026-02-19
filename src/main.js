@@ -10,8 +10,27 @@ const resumeSfx = new Audio(resumeSrc);
 const completedSfx = new Audio(completedSrc);
 const collectedSfx = new Audio(collectedSrc);
 
-let workDuration = 25 * 60;
-let breakDuration = 5 * 60;
+const STORAGE_KEY = 'pomodoro-settings';
+
+function loadSettings() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (saved) return saved;
+    } catch { /* ignore */ }
+    return { workMinutes: 25, breakMinutes: 5 };
+}
+
+function saveSettings(workMinutes, breakMinutes) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ workMinutes, breakMinutes }));
+}
+
+function clearSettings() {
+    localStorage.removeItem(STORAGE_KEY);
+}
+
+const initialSettings = loadSettings();
+let workDuration = initialSettings.workMinutes * 60;
+let breakDuration = initialSettings.breakMinutes * 60;
 
 const app = document.getElementById('app');
 const appTitle = document.getElementById('app-title');
@@ -77,7 +96,13 @@ function reset() {
     clearInterval(intervalId);
     intervalId = null;
     isRunning = false;
-    timeRemaining = currentMode === 'work' ? workDuration : breakDuration;
+    clearSettings();
+    workDuration = 25 * 60;
+    breakDuration = 5 * 60;
+    currentMode = 'work';
+    timeRemaining = workDuration;
+    workInput.value = 25;
+    breakInput.value = 5;
     updateDisplay();
 }
 
@@ -92,6 +117,9 @@ const settingsPanel = document.getElementById('settings-panel');
 const workInput = document.getElementById('work-duration-input');
 const breakInput = document.getElementById('break-duration-input');
 const savedMsg = document.getElementById('settings-saved-msg');
+
+workInput.value = initialSettings.workMinutes;
+breakInput.value = initialSettings.breakMinutes;
 
 let settingsChanged = false;
 let savedMsgTimeout = null;
@@ -123,6 +151,7 @@ workInput.addEventListener('change', () => {
     const val = parseInt(workInput.value, 10);
     if (!val || val < 1) return;
     workDuration = val * 60;
+    saveSettings(val, breakDuration / 60);
     settingsChanged = true;
     if (currentMode === 'work') {
         clearInterval(intervalId);
@@ -137,6 +166,7 @@ breakInput.addEventListener('change', () => {
     const val = parseInt(breakInput.value, 10);
     if (!val || val < 1) return;
     breakDuration = val * 60;
+    saveSettings(workDuration / 60, val);
     settingsChanged = true;
     if (currentMode === 'break') {
         clearInterval(intervalId);
