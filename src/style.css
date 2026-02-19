@@ -356,22 +356,20 @@ body {
 }
 
 .session-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: var(--radius-full);
+    font-size: 14px;
     flex-shrink: 0;
 }
 
 .session-dot--work {
-    background-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .session-dot--break {
-    background-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 #app[data-mode="work"] .session-dot--active,
 #app[data-mode="break"] .session-dot--active {
-    background-color: #fff;
-    box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    color: #fff;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
 }

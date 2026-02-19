@@ -113,15 +113,16 @@ function formatTime(seconds) {
 
 function renderDots() {
     sessionHistoryEl.innerHTML = '';
+    const iconFor = type => type === 'work' ? 'ph-lightbulb' : 'ph-coffee';
     sessionHistory.forEach(session => {
-        const dot = document.createElement('div');
-        dot.className = `session-dot session-dot--${session.type}`;
+        const dot = document.createElement('i');
+        dot.className = `ph ${iconFor(session.type)} session-dot session-dot--${session.type}`;
         sessionHistoryEl.appendChild(dot);
     });
     const fullDuration = currentMode === 'work' ? workDuration : breakDuration;
     if (isRunning || timeRemaining < fullDuration) {
-        const activeDot = document.createElement('div');
-        activeDot.className = 'session-dot session-dot--active';
+        const activeDot = document.createElement('i');
+        activeDot.className = `ph ${iconFor(currentMode)} session-dot session-dot--active`;
         sessionHistoryEl.appendChild(activeDot);
     }
 }
