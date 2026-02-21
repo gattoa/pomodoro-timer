@@ -20,6 +20,10 @@
                     <i id="theme-icon-moon" class="ph ph-moon" style="display:none"></i>
                     <i id="theme-icon-auto" class="ph ph-circle-half" style="display:none"></i>
                 </button>
+                <button id="mute-toggle-btn" class="btn btn-ghost btn-theme-toggle" aria-label="Toggle sound">
+                    <i id="mute-icon-on" class="ph ph-speaker-high"></i>
+                    <i id="mute-icon-off" class="ph ph-speaker-slash" style="display:none"></i>
+                </button>
                 <button id="settings-toggle-btn" class="btn btn-ghost">Settings</button>
                 <span id="settings-saved-msg" class="settings-saved-msg">Saved</span>
             </div>
@@ -38,6 +42,10 @@
                 <div class="settings-field">
                     <label for="break-duration-input" class="settings-label">Break (min)</label>
                     <input id="break-duration-input" type="number" class="settings-input" value="5" min="1" max="60" />
+                </div>
+                <div class="settings-field">
+                    <label for="long-break-duration-input" class="settings-label">Long break (min)</label>
+                    <input id="long-break-duration-input" type="number" class="settings-input" value="15" min="1" max="60" />
                 </div>
             </div>
         </div>

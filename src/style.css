@@ -187,6 +187,62 @@ body {
     transition: background 0.8s ease;
 }
 
+/* ── Session Completion Flash ── */
+@keyframes completion-flash {
+    0% { opacity: 1; filter: brightness(1); }
+    30% { opacity: 1; filter: brightness(1.8); }
+    100% { opacity: 1; filter: brightness(1); }
+}
+
+.main--celebrating::before {
+    animation: completion-flash 0.5s ease-out;
+}
+
+@keyframes timer-pulse {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+.time-display--pulse {
+    animation: timer-pulse 0.5s ease-out;
+}
+
+/* ── Session Dot Entrance ── */
+@keyframes dot-enter {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.session-dot--entering {
+    animation: dot-enter 0.35s ease-out forwards;
+}
+
+/* ── Pause Breathing ── */
+@keyframes pause-breathe {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.48; }
+}
+
+.main--paused::before {
+    animation: pause-breathe 3s ease-in-out infinite;
+}
+
+@keyframes timer-breathe {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.main--paused .time-display {
+    animation: timer-breathe 3s ease-in-out infinite;
+}
+
 /* ── Timer Container ── */
 .timer-container {
     padding: var(--space-xl);
@@ -342,7 +398,7 @@ body {
 /* ── Session History Dots ── */
 .session-history {
     position: fixed;
-    bottom: 0;
+    bottom: 28px;
     left: 0;
     right: 0;
     display: flex;
@@ -350,12 +406,20 @@ body {
     align-items: center;
     flex-wrap: wrap;
     gap: var(--space-sm);
-    padding: var(--space-md) var(--space-lg) var(--space-xl);
+    padding: var(--space-md) var(--space-lg) var(--space-md);
 }
 
 .session-dot {
     font-size: 14px;
     flex-shrink: 0;
+}
+
+.session-dot--group-end {
+    margin-right: var(--space-sm);
+}
+
+.session-dot--long-break {
+    margin: 0 var(--space-sm);
 }
 
 .session-dot--work {
@@ -379,6 +443,7 @@ body {
     align-items: center;
     justify-content: center;
 }
+
 
 /* ── Day Theme ── */
 #app[data-theme="day"] {
@@ -433,6 +498,7 @@ body {
     color: rgba(0, 0, 0, 0.7);
     filter: none;
 }
+
 
 #app[data-theme="day"][data-mode="work"] .time-display,
 #app[data-theme="day"][data-mode="break"] .time-display {
