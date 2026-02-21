@@ -66,7 +66,8 @@ const app = document.getElementById('app');
 const appTitle = document.getElementById('app-title');
 const timeDisplay = document.getElementById('time-display');
 const startPauseBtn = document.getElementById('start-pause-btn');
-const resetBtn = document.getElementById('reset-btn');
+const restartBtn = document.getElementById('restart-btn');
+const clearAllBtn = document.getElementById('clear-all-btn');
 const mainEl = document.querySelector('.main');
 const sessionHistoryEl = document.getElementById('session-history');
 
@@ -288,7 +289,15 @@ function startPause() {
     updateDisplay();
 }
 
-function reset() {
+function restart() {
+    clearInterval(intervalId);
+    intervalId = null;
+    isRunning = false;
+    timeRemaining = currentMode === 'work' ? workDuration : getBreakDuration();
+    updateDisplay();
+}
+
+function clearAll() {
     clearInterval(intervalId);
     intervalId = null;
     isRunning = false;
@@ -308,8 +317,29 @@ function reset() {
     updateDisplay();
 }
 
+// ── Confirm Modal ──
+const confirmModal = document.getElementById('confirm-modal');
+const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
+const confirmClearBtn = document.getElementById('confirm-clear-btn');
+
+function showConfirmModal() {
+    confirmModal.classList.add('confirm-modal--open');
+}
+
+function hideConfirmModal() {
+    confirmModal.classList.remove('confirm-modal--open');
+}
+
+confirmCancelBtn.addEventListener('click', hideConfirmModal);
+confirmClearBtn.addEventListener('click', () => {
+    hideConfirmModal();
+    clearAll();
+});
+confirmModal.querySelector('.confirm-modal__backdrop').addEventListener('click', hideConfirmModal);
+
 startPauseBtn.addEventListener('click', startPause);
-resetBtn.addEventListener('click', reset);
+restartBtn.addEventListener('click', restart);
+clearAllBtn.addEventListener('click', showConfirmModal);
 
 updateDisplay();
 
@@ -475,7 +505,11 @@ document.addEventListener('keydown', (e) => {
             startPause();
             break;
         case 'KeyR':
-            reset();
+            if (e.shiftKey) {
+                showConfirmModal();
+            } else {
+                restart();
+            }
             break;
         case 'KeyS':
             toggleSettings();

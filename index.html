@@ -32,7 +32,8 @@
             </div>
             <span id="app-title" class="app-title">Focus</span>
             <div class="app-header-right">
-                <button id="reset-btn" class="btn btn-ghost btn-ghost--danger">Reset</button>
+                <button id="restart-btn" class="btn btn-ghost">Restart</button>
+                <button id="clear-all-btn" class="btn btn-ghost btn-ghost--danger">Clear All</button>
             </div>
         </header>
 
@@ -66,6 +67,17 @@
 
         <div class="session-history" id="session-history"></div>
 
+        <div id="confirm-modal" class="confirm-modal">
+            <div class="confirm-modal__backdrop"></div>
+            <div class="confirm-modal__dialog">
+                <p class="confirm-modal__message">This will clear your session history and reset all settings to defaults.</p>
+                <div class="confirm-modal__actions">
+                    <button id="confirm-cancel-btn" class="btn btn-ghost">Cancel</button>
+                    <button id="confirm-clear-btn" class="btn btn-ghost btn-ghost--danger">Clear All</button>
+                </div>
+            </div>
+        </div>
+
         <div class="coachmarks coachmarks--left">
             <span><kbd>T</kbd> Theme</span>
             <span><kbd>M</kbd> Mute</span>
@@ -73,7 +85,8 @@
         </div>
         <div class="coachmarks coachmarks--right">
             <span><kbd>Space</kbd> Start/Pause</span>
-            <span><kbd>R</kbd> Reset</span>
+            <span><kbd>R</kbd> Restart</span>
+            <span><kbd>Shift+R</kbd> Clear All</span>
         </div>
     </div>
     <script type="module" src="/src/main.js"></script>
