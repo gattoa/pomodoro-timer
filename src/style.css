@@ -1,35 +1,89 @@
 :root {
-    /* ── Colors: Background & Surface ── */
-    --color-bg: #0e0e10;
-    --color-surface: #1a1a1f;
-    --color-surface-raised: #242429;
+    /* ══ PRIMITIVES ══ */
 
-    /* ── Colors: Text ── */
-    --color-text: #e8e6e3;
-    --color-text-muted: #9a9a9e;
-    --color-text-inverse: #0e0e10;
+    /* ── Grays ── */
+    --gray-950: #0e0e10;
+    --gray-900: #1a1a1f;
+    --gray-850: #242429;
+    --gray-800: #2e2e35;
+    --gray-500: #9a9a9e;
+    --gray-200: #e8e6e3;
 
-    /* ── Colors: Work Mode (warm amber) ── */
-    --color-work: #d4943a;
-    --color-work-dim: #b37a25;
-    --color-work-glow: rgba(212, 148, 58, 0.25);
+    /* ── Amber ── */
+    --amber-500: #d4943a;
+    --amber-600: #b37a25;
 
-    /* ── Colors: Break Mode (blue-green) ── */
-    --color-break: #38b2a3;
-    --color-break-dim: #268079;
-    --color-break-glow: rgba(56, 178, 163, 0.25);
+    /* ── Teal ── */
+    --teal-500: #38b2a3;
+    --teal-600: #268079;
 
-    /* ── Colors: Accent / Interactive ── */
-    --color-accent: #7b8cff;
-    --color-accent-dim: #5563c4;
+    /* ── Indigo ── */
+    --indigo-400: #7b8cff;
+    --indigo-600: #5563c4;
 
-    /* ── Colors: Semantic ── */
-    --color-danger: #d44a2a;
-    --color-success: #38b2a3;
+    /* ── Red ── */
+    --red-500: #d44a2a;
 
-    /* ── Colors: Border ── */
-    --color-border: #2e2e35;
-    --color-border-focus: #7b8cff;
+    /* ── Color Channels (for rgba composition) ── */
+    --rgb-white: 255, 255, 255;
+    --rgb-black: 0, 0, 0;
+    --rgb-bg: 14, 14, 16;
+    --rgb-amber-500: 212, 148, 58;
+    --rgb-teal-500: 56, 178, 163;
+    --rgb-red-500: 212, 74, 42;
+    --rgb-green-500: 46, 204, 113;
+
+    /* ══ SEMANTIC TOKENS ══ */
+
+    /* ── Background & Surface ── */
+    --color-bg: var(--gray-950);
+    --color-surface: var(--gray-900);
+    --color-surface-raised: var(--gray-850);
+
+    /* ── Text ── */
+    --color-text: var(--gray-200);
+    --color-text-muted: var(--gray-500);
+    --color-text-inverse: var(--gray-950);
+
+    /* ── Work Mode (warm amber) ── */
+    --color-work: var(--amber-500);
+    --color-work-dim: var(--amber-600);
+    --color-work-glow: rgba(var(--rgb-amber-500), 0.25);
+
+    /* ── Break Mode (blue-green) ── */
+    --color-break: var(--teal-500);
+    --color-break-dim: var(--teal-600);
+    --color-break-glow: rgba(var(--rgb-teal-500), 0.25);
+
+    /* ── Accent / Interactive ── */
+    --color-accent: var(--indigo-400);
+    --color-accent-dim: var(--indigo-600);
+
+    /* ── Semantic ── */
+    --color-danger: var(--red-500);
+    --color-success: var(--teal-500);
+
+    /* ── Border ── */
+    --color-border: var(--gray-800);
+    --color-border-focus: var(--indigo-400);
+
+    /* ── On-Fill (foreground over hourglass gradient) ── */
+    --color-on-fill: rgba(var(--rgb-white), 1);
+    --color-on-fill-medium: rgba(var(--rgb-white), 0.6);
+    --color-on-fill-muted: rgba(var(--rgb-white), 0.35);
+    --color-on-fill-subtle: rgba(var(--rgb-white), 0.3);
+
+    /* ── Overlay (settings panel) ── */
+    --color-overlay-bg: rgba(var(--rgb-bg), 0.85);
+    --color-overlay-border: rgba(var(--rgb-white), 0.1);
+
+    /* ── Hint (coachmarks, subtle UI) ── */
+    --color-hint: rgba(var(--rgb-white), 0.25);
+    --color-hint-strong: rgba(var(--rgb-white), 0.35);
+
+    /* ── Effects ── */
+    --shadow-timer: 0 2px 20px rgba(var(--rgb-black), 0.5);
+    --filter-dot-active: drop-shadow(0 0 6px rgba(var(--rgb-white), 0.5));
 
     /* ── Spacing Scale ── */
     --space-xs: 4px;
@@ -43,23 +97,20 @@
     --font-mono: 'Overpass Mono', 'Fira Code', 'Courier New', monospace;
 
     /* ── Typography: Font Sizes ── */
-    --text-xs: 0.75rem;
-    /* 12px */
-    --text-sm: 0.875rem;
-    /* 14px */
-    --text-base: 1rem;
-    /* 16px */
-    --text-lg: 1.25rem;
-    /* 20px */
-    --text-xl: 1.5rem;
-    /* 24px */
-    --text-2xl: 2rem;
-    /* 32px */
-    --text-timer: 4.5rem;
-    /* 72px — main countdown display */
+    --text-2xs: 0.6875rem; /* 11px */
+    --text-xs: 0.75rem; /* 12px */
+    --text-sm: 0.875rem; /* 14px */
+    --text-base: 1rem; /* 16px */
+    --text-lg: 1.25rem; /* 20px */
+    --text-xl: 1.5rem; /* 24px */
+    --text-2xl: 2rem; /* 32px */
+    --text-timer: 4.5rem; /* 72px — main countdown display */
+
+    /* ── Icon Sizes ── */
+    --icon-sm: 14px;
+    --icon-md: 22px;
 
     /* ── Typography: Font Weights ── */
-    --weight-normal: 400;
     --weight-medium: 500;
     --weight-semibold: 600;
     --weight-bold: 700;
@@ -158,7 +209,7 @@ body {
     padding: var(--space-xl);
     position: relative;
     overflow: hidden;
-    --fill-color: rgb(212, 148, 58);
+    --fill-color: var(--color-work);
     --fill-pct: 1;
 }
 
@@ -181,6 +232,7 @@ body {
 
 .main--paused::before {
     opacity: 0.35;
+    animation: pause-breathe 3s ease-in-out infinite;
 }
 
 .main.hourglass-refill::before {
@@ -230,10 +282,6 @@ body {
     50% { opacity: 0.48; }
 }
 
-.main--paused::before {
-    animation: pause-breathe 3s ease-in-out infinite;
-}
-
 @keyframes timer-breathe {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
@@ -262,8 +310,8 @@ body {
 
 #app[data-mode="work"] .time-display,
 #app[data-mode="break"] .time-display {
-    color: #fff;
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    color: var(--color-on-fill);
+    text-shadow: var(--shadow-timer);
 }
 
 /* ── Time Display ── */
@@ -294,31 +342,31 @@ body {
     height: 56px;
     border-radius: var(--radius-full);
     background: transparent;
-    border: 1.5px solid rgba(255, 255, 255, 0.35);
-    color: rgba(255, 255, 255, 0.35);
+    border: 1.5px solid var(--color-on-fill-muted);
+    color: var(--color-on-fill-muted);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: var(--icon-md);
     padding: 0;
     transition: border-color 0.2s, color 0.2s;
 }
 
 /* Running state: subdued, brightens fully on hover */
 .btn-icon:hover {
-    border-color: rgba(255, 255, 255, 1);
-    color: rgba(255, 255, 255, 1);
+    border-color: var(--color-on-fill);
+    color: var(--color-on-fill);
 }
 
 /* Paused state: icon prominent, border stays subtle */
 .btn-icon--paused {
-    color: rgba(255, 255, 255, 1);
-    border-color: rgba(255, 255, 255, 0.35);
+    color: var(--color-on-fill);
+    border-color: var(--color-on-fill-muted);
 }
 
 .btn-icon--paused:hover {
-    border-color: rgba(255, 255, 255, 0.6);
-    color: rgba(255, 255, 255, 1);
+    border-color: var(--color-on-fill-medium);
+    color: var(--color-on-fill);
 }
 
 .btn-ghost {
@@ -345,10 +393,10 @@ body {
     left: 0;
     right: 0;
     z-index: 10;
-    background-color: rgba(14, 14, 16, 0.85);
+    background-color: var(--color-overlay-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--color-overlay-border);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
@@ -411,7 +459,7 @@ body {
 }
 
 .session-dot {
-    font-size: 14px;
+    font-size: var(--icon-sm);
     flex-shrink: 0;
 }
 
@@ -423,18 +471,15 @@ body {
     margin: 0 var(--space-sm);
 }
 
-.session-dot--work {
-    color: rgba(255, 255, 255, 0.3);
-}
-
+.session-dot--work,
 .session-dot--break {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-on-fill-subtle);
 }
 
 #app[data-mode="work"] .session-dot--active,
 #app[data-mode="break"] .session-dot--active {
-    color: #fff;
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+    color: var(--color-on-fill);
+    filter: var(--filter-dot-active);
 }
 
 /* ── Keyboard Coachmarks ── */
@@ -444,8 +489,8 @@ body {
     display: flex;
     gap: var(--space-md);
     font-family: var(--font-body);
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.25);
+    font-size: var(--text-2xs);
+    color: var(--color-hint);
     pointer-events: none;
     user-select: none;
 }
@@ -461,15 +506,7 @@ body {
 .coachmarks kbd {
     font-family: inherit;
     font-weight: var(--weight-semibold);
-    color: rgba(255, 255, 255, 0.35);
-}
-
-#app[data-theme="day"] .coachmarks {
-    color: rgba(0, 0, 0, 0.2);
-}
-
-#app[data-theme="day"] .coachmarks kbd {
-    color: rgba(0, 0, 0, 0.3);
+    color: var(--color-hint-strong);
 }
 
 /* ── Theme Toggle ── */
@@ -482,73 +519,37 @@ body {
 
 
 /* ── Day Theme ── */
-#app[data-theme="day"] {
-    --color-bg: #f5f2ee;
-    --color-surface: #ebe7e1;
-    --color-surface-raised: #e0dbd4;
-    --color-text: #2a2825;
-    --color-text-muted: #7a7670;
-    --color-text-inverse: #f5f2ee;
-    --color-work: #c4822e;
-    --color-work-dim: #a06a1e;
-    --color-work-glow: rgba(196, 130, 46, 0.2);
-    --color-break: #2a9d8f;
-    --color-break-dim: #1e7568;
-    --color-break-glow: rgba(42, 157, 143, 0.2);
-    --color-accent: #5c6bc0;
-    --color-accent-dim: #3f4fa0;
-    --color-danger: #c44422;
-    --color-success: #2a9d8f;
-    --color-border: #d5d0c9;
-    --color-border-focus: #5c6bc0;
-}
+:root:has(#app[data-theme="day"]) {
+    /* Primitive overrides */
+    --gray-950: #f5f2ee;
+    --gray-900: #ebe7e1;
+    --gray-850: #e0dbd4;
+    --gray-800: #d5d0c9;
+    --gray-500: #7a7670;
+    --gray-200: #2a2825;
+    --amber-500: #c4822e;
+    --amber-600: #a06a1e;
+    --teal-500: #2a9d8f;
+    --teal-600: #1e7568;
+    --indigo-400: #5c6bc0;
+    --indigo-600: #3f4fa0;
+    --red-500: #c44422;
+    --rgb-bg: 245, 242, 238;
+    --rgb-amber-500: 196, 130, 46;
+    --rgb-teal-500: 42, 157, 143;
+    --rgb-red-500: 196, 68, 34;
+    --rgb-green-500: 30, 117, 104;
 
-/* Day theme: hardcoded color overrides */
-#app[data-theme="day"] .btn-icon {
-    border-color: rgba(0, 0, 0, 0.25);
-    color: rgba(0, 0, 0, 0.25);
-}
-
-#app[data-theme="day"] .btn-icon:hover {
-    border-color: rgba(0, 0, 0, 0.8);
-    color: rgba(0, 0, 0, 0.8);
-}
-
-#app[data-theme="day"] .btn-icon--paused {
-    color: rgba(0, 0, 0, 0.7);
-    border-color: rgba(0, 0, 0, 0.25);
-}
-
-#app[data-theme="day"] .btn-icon--paused:hover {
-    border-color: rgba(0, 0, 0, 0.5);
-    color: rgba(0, 0, 0, 0.7);
-}
-
-#app[data-theme="day"] .session-dot--work,
-#app[data-theme="day"] .session-dot--break {
-    color: rgba(0, 0, 0, 0.25);
-}
-
-#app[data-theme="day"][data-mode="work"] .session-dot--active,
-#app[data-theme="day"][data-mode="break"] .session-dot--active {
-    color: rgba(0, 0, 0, 0.7);
-    filter: none;
-}
-
-
-#app[data-theme="day"][data-mode="work"] .time-display,
-#app[data-theme="day"][data-mode="break"] .time-display {
-    color: var(--color-text);
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
-}
-
-#app[data-theme="day"] .settings-panel {
-    background-color: rgba(245, 242, 238, 0.85);
-    border-bottom-color: rgba(0, 0, 0, 0.08);
-}
-
-body:has(#app[data-theme="day"]) {
-    background-color: #f5f2ee;
+    /* Semantic overrides (different alpha curves for dark-on-light) */
+    --color-on-fill: rgba(var(--rgb-black), 0.75);
+    --color-on-fill-medium: rgba(var(--rgb-black), 0.5);
+    --color-on-fill-muted: rgba(var(--rgb-black), 0.25);
+    --color-on-fill-subtle: rgba(var(--rgb-black), 0.25);
+    --color-overlay-border: rgba(var(--rgb-black), 0.08);
+    --color-hint: rgba(var(--rgb-black), 0.2);
+    --color-hint-strong: rgba(var(--rgb-black), 0.3);
+    --shadow-timer: 0 1px 8px rgba(var(--rgb-black), 0.1);
+    --filter-dot-active: none;
 }
 
 #app[data-theme="day"] .main::before {

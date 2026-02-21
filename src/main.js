@@ -87,13 +87,19 @@ if (!faviconLink) {
     document.head.appendChild(faviconLink);
 }
 
+// ── CSS Token Helpers ──
+const rootStyles = () => getComputedStyle(document.documentElement);
+
+function getCssColor(token) {
+    return rootStyles().getPropertyValue(token).trim();
+}
+
+function getCssChannels(token) {
+    return rootStyles().getPropertyValue(token).trim().split(',').map(Number);
+}
+
 function updateFavicon() {
-    const isDay = app.dataset.theme === 'day';
-    const colors = {
-        work: isDay ? '#c4822e' : '#d4943a',
-        break: isDay ? '#2a9d8f' : '#38b2a3',
-    };
-    const color = colors[currentMode];
+    const color = currentMode === 'work' ? getCssColor('--color-work') : getCssColor('--color-break');
     faviconCtx.clearRect(0, 0, 32, 32);
     faviconCtx.beginPath();
     faviconCtx.arc(16, 16, 14, 0, Math.PI * 2);
@@ -103,15 +109,12 @@ function updateFavicon() {
 }
 
 // ── Hourglass Color System ──
-const HOURGLASS_COLORS = {
-    work: { start: [212, 148, 58], end: [212, 74, 42] },
-    break: { start: [56, 178, 163], end: [46, 204, 113] },
-};
-
-const HOURGLASS_COLORS_DAY = {
-    work: { start: [196, 130, 46], end: [196, 68, 34] },
-    break: { start: [42, 157, 143], end: [30, 117, 104] },
-};
+function getHourglassColors() {
+    return {
+        work: { start: getCssChannels('--rgb-amber-500'), end: getCssChannels('--rgb-red-500') },
+        break: { start: getCssChannels('--rgb-teal-500'), end: getCssChannels('--rgb-green-500') },
+    };
+}
 
 function lerpColor(a, b, t) {
     const r = Math.round(a[0] + (b[0] - a[0]) * t);
@@ -137,8 +140,7 @@ function updateHourglass() {
     const total = currentMode === 'work' ? workDuration : getBreakDuration();
     const pct = timeRemaining / total;
     const colorProgress = hourglassEase(timeRemaining);
-    const palette = app.dataset.theme === 'day' ? HOURGLASS_COLORS_DAY : HOURGLASS_COLORS;
-    const colors = palette[currentMode];
+    const colors = getHourglassColors()[currentMode];
     const color = lerpColor(colors.start, colors.end, colorProgress);
     mainEl.style.setProperty('--fill-pct', pct);
     mainEl.style.setProperty('--fill-color', color);
@@ -313,6 +315,8 @@ updateDisplay();
 
 // ── Settings ──
 const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+const settingsIconGear = document.getElementById('settings-icon-gear');
+const settingsIconClose = document.getElementById('settings-icon-close');
 const settingsPanel = document.getElementById('settings-panel');
 const workInput = document.getElementById('work-duration-input');
 const breakInput = document.getElementById('break-duration-input');
@@ -334,9 +338,14 @@ function showSavedMsg() {
     settingsChanged = false;
 }
 
+function updateSettingsIcon(isOpen) {
+    settingsIconGear.style.display = isOpen ? 'none' : '';
+    settingsIconClose.style.display = isOpen ? '' : 'none';
+}
+
 function toggleSettings() {
     const isOpen = settingsPanel.classList.toggle('settings-panel--open');
-    settingsToggleBtn.textContent = isOpen ? 'Close' : 'Settings';
+    updateSettingsIcon(isOpen);
     if (!isOpen && settingsChanged) showSavedMsg();
 }
 
@@ -345,7 +354,7 @@ settingsToggleBtn.addEventListener('click', toggleSettings);
 document.addEventListener('click', (e) => {
     if (settingsPanel.classList.contains('settings-panel--open') && !e.target.closest('.top-bar')) {
         settingsPanel.classList.remove('settings-panel--open');
-        settingsToggleBtn.textContent = 'Settings';
+        updateSettingsIcon(false);
         if (settingsChanged) showSavedMsg();
     }
 });
@@ -354,50 +363,41 @@ function currentLongBreakMinutes() {
     return longBreakDuration / 60;
 }
 
-workInput.addEventListener('change', () => {
-    const val = parseInt(workInput.value, 10);
+function handleDurationChange(input, setDuration, getResetDuration, shouldReset) {
+    const val = parseInt(input.value, 10);
     if (!val || val < 1) return;
-    workDuration = val * 60;
-    saveSettings(val, breakDuration / 60, currentLongBreakMinutes());
+    setDuration(val * 60);
+    saveSettings(workDuration / 60, breakDuration / 60, currentLongBreakMinutes());
     settingsChanged = true;
-    if (currentMode === 'work') {
+    if (shouldReset()) {
         clearInterval(intervalId);
         intervalId = null;
         isRunning = false;
-        timeRemaining = workDuration;
+        timeRemaining = getResetDuration();
         updateDisplay();
     }
-});
+}
 
-breakInput.addEventListener('change', () => {
-    const val = parseInt(breakInput.value, 10);
-    if (!val || val < 1) return;
-    breakDuration = val * 60;
-    saveSettings(workDuration / 60, val, currentLongBreakMinutes());
-    settingsChanged = true;
-    if (currentMode === 'break') {
-        clearInterval(intervalId);
-        intervalId = null;
-        isRunning = false;
-        timeRemaining = breakDuration;
-        updateDisplay();
-    }
-});
+workInput.addEventListener('change', () => handleDurationChange(
+    workInput,
+    (s) => { workDuration = s; },
+    () => workDuration,
+    () => currentMode === 'work',
+));
 
-longBreakInput.addEventListener('change', () => {
-    const val = parseInt(longBreakInput.value, 10);
-    if (!val || val < 1) return;
-    longBreakDuration = val * 60;
-    saveSettings(workDuration / 60, breakDuration / 60, val);
-    settingsChanged = true;
-    if (currentMode === 'break' && getWorkSessionCount() % 4 === 0) {
-        clearInterval(intervalId);
-        intervalId = null;
-        isRunning = false;
-        timeRemaining = longBreakDuration;
-        updateDisplay();
-    }
-});
+breakInput.addEventListener('change', () => handleDurationChange(
+    breakInput,
+    (s) => { breakDuration = s; },
+    () => breakDuration,
+    () => currentMode === 'break',
+));
+
+longBreakInput.addEventListener('change', () => handleDurationChange(
+    longBreakInput,
+    (s) => { longBreakDuration = s; },
+    () => longBreakDuration,
+    () => currentMode === 'break' && getWorkSessionCount() % 4 === 0,
+));
 
 // ── Mute Toggle ──
 const muteToggleBtn = document.getElementById('mute-toggle-btn');
