@@ -90,7 +90,7 @@ if (!faviconLink) {
 function updateFavicon() {
     const isDay = app.dataset.theme === 'day';
     const colors = {
-        work: isDay ? '#d44f22' : '#e8643a',
+        work: isDay ? '#c4822e' : '#d4943a',
         break: isDay ? '#2a9d8f' : '#38b2a3',
     };
     const color = colors[currentMode];
@@ -104,12 +104,12 @@ function updateFavicon() {
 
 // ── Hourglass Color System ──
 const HOURGLASS_COLORS = {
-    work: { start: [232, 100, 58], end: [204, 44, 44] },
+    work: { start: [212, 148, 58], end: [212, 74, 42] },
     break: { start: [56, 178, 163], end: [46, 204, 113] },
 };
 
 const HOURGLASS_COLORS_DAY = {
-    work: { start: [212, 79, 34], end: [168, 58, 24] },
+    work: { start: [196, 130, 46], end: [196, 68, 34] },
     break: { start: [42, 157, 143], end: [30, 117, 104] },
 };
 
@@ -121,25 +121,16 @@ function lerpColor(a, b, t) {
 }
 
 function hourglassEase(timeRemaining) {
-    // Proportional easing: scales with session length
-    //   1. First 90%: barely shifts          (0 → 0.10)
-    //   2. 90% → 95%: subtle warmup          (0.10 → 0.25)
-    //   3. Final 5%: dramatic, urgent shift   (0.25 → 1.0)
+    // Percentage-based urgency window:
+    //   1. > 15% remaining: calm              (0)
+    //   2. 15% → 5% remaining: ramp to red    (0 → 1.0)
+    //   3. Final 5%: hold at full red          (1.0)
     const total = currentMode === 'work' ? workDuration : getBreakDuration();
-    const elapsed = total - timeRemaining;
-    const progress = elapsed / total;
-
-    if (progress < 0.90) {
-        return (progress / 0.90) * 0.10;
-    }
-    if (progress < 0.95) {
-        const t = (progress - 0.90) / 0.05;
-        return 0.10 + t * 0.15;
-    }
-    // Final 5%: cubic ease-in for aggressive ramp
-    const t = (progress - 0.95) / 0.05;
-    const eased = t * t * t;
-    return 0.25 + eased * 0.75;
+    const pct = timeRemaining / total;
+    if (pct > 0.15) return 0;
+    if (pct <= 0.05) return 1.0;
+    const t = (0.15 - pct) / 0.10;
+    return t * t;
 }
 
 function updateHourglass() {
