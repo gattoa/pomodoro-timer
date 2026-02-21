@@ -15,21 +15,21 @@
         <div class="top-bar">
         <header class="app-header">
             <div class="app-header-left">
+                <button id="reset-btn" class="btn btn-ghost btn-ghost--danger">Reset</button>
+            </div>
+            <span id="app-title" class="app-title">Focus</span>
+            <div class="app-header-right">
+                <button id="settings-toggle-btn" class="btn btn-ghost">Settings</button>
+                <span id="settings-saved-msg" class="settings-saved-msg">Saved</span>
+                <button id="mute-toggle-btn" class="btn btn-ghost btn-theme-toggle" aria-label="Toggle sound">
+                    <i id="mute-icon-on" class="ph ph-speaker-high"></i>
+                    <i id="mute-icon-off" class="ph ph-speaker-slash" style="display:none"></i>
+                </button>
                 <button id="theme-toggle-btn" class="btn btn-ghost btn-theme-toggle" aria-label="Toggle theme">
                     <i id="theme-icon-sun" class="ph ph-sun" style="display:none"></i>
                     <i id="theme-icon-moon" class="ph ph-moon" style="display:none"></i>
                     <i id="theme-icon-auto" class="ph ph-circle-half" style="display:none"></i>
                 </button>
-                <button id="mute-toggle-btn" class="btn btn-ghost btn-theme-toggle" aria-label="Toggle sound">
-                    <i id="mute-icon-on" class="ph ph-speaker-high"></i>
-                    <i id="mute-icon-off" class="ph ph-speaker-slash" style="display:none"></i>
-                </button>
-                <button id="settings-toggle-btn" class="btn btn-ghost">Settings</button>
-                <span id="settings-saved-msg" class="settings-saved-msg">Saved</span>
-            </div>
-            <span id="app-title" class="app-title">Focus</span>
-            <div class="app-header-right">
-                <button id="reset-btn" class="btn btn-ghost btn-ghost--danger">Reset</button>
             </div>
         </header>
 
@@ -62,6 +62,16 @@
         </main>
 
         <div class="session-history" id="session-history"></div>
+
+        <div class="coachmarks coachmarks--left">
+            <span><kbd>Space</kbd> Start/Pause</span>
+            <span><kbd>R</kbd> Reset</span>
+        </div>
+        <div class="coachmarks coachmarks--right">
+            <span><kbd>S</kbd> Settings</span>
+            <span><kbd>T</kbd> Theme</span>
+            <span><kbd>M</kbd> Mute</span>
+        </div>
     </div>
     <script type="module" src="/src/main.js"></script>
 </body>

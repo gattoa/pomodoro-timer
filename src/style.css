@@ -361,6 +361,7 @@ body {
 .settings-panel__inner {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: var(--space-md);
     padding: var(--space-md) var(--space-lg);
@@ -434,6 +435,41 @@ body {
 #app[data-mode="break"] .session-dot--active {
     color: #fff;
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+}
+
+/* ── Keyboard Coachmarks ── */
+.coachmarks {
+    position: fixed;
+    bottom: 10px;
+    display: flex;
+    gap: var(--space-md);
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.25);
+    pointer-events: none;
+    user-select: none;
+}
+
+.coachmarks--left {
+    left: var(--space-lg);
+}
+
+.coachmarks--right {
+    right: var(--space-lg);
+}
+
+.coachmarks kbd {
+    font-family: inherit;
+    font-weight: var(--weight-semibold);
+    color: rgba(255, 255, 255, 0.35);
+}
+
+#app[data-theme="day"] .coachmarks {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+#app[data-theme="day"] .coachmarks kbd {
+    color: rgba(0, 0, 0, 0.3);
 }
 
 /* ── Theme Toggle ── */
