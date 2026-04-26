@@ -364,8 +364,16 @@ body {
 
 #restart-btn,
 #clear-all-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
     font-size: var(--text-xs);
     font-weight: var(--weight-regular);
+}
+
+#restart-btn i,
+#clear-all-btn i {
+    font-size: var(--text-lg);
 }
 
 /* ── Settings Panel ── */
