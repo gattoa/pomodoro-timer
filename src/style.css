@@ -78,12 +78,11 @@
     --color-overlay-border: rgba(var(--rgb-white), 0.1);
 
     /* ── Hint (coachmarks, subtle UI) ── */
-    --color-hint: rgba(var(--rgb-white), 0.25);
-    --color-hint-strong: rgba(var(--rgb-white), 0.35);
+    --color-hint: rgba(var(--rgb-white), 0.4);
+    --color-hint-strong: rgba(var(--rgb-white), 0.55);
 
     /* ── Effects ── */
     --shadow-timer: 0 2px 20px rgba(var(--rgb-black), 0.5);
-    --filter-dot-active: drop-shadow(0 0 6px rgba(var(--rgb-white), 0.5));
 
     /* ── Spacing Scale ── */
     --space-xs: 4px;
@@ -107,7 +106,6 @@
     --text-timer: 4.5rem; /* 72px — main countdown display */
 
     /* ── Icon Sizes ── */
-    --icon-sm: 14px;
     --icon-md: 22px;
 
     /* ── Typography: Font Weights ── */
@@ -261,22 +259,6 @@ body {
 
 .time-display--pulse {
     animation: timer-pulse 0.5s ease-out;
-}
-
-/* ── Session Dot Entrance ── */
-@keyframes dot-enter {
-    from {
-        opacity: 0;
-        transform: translateY(6px) scale(0.7);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.session-dot--entering {
-    animation: dot-enter 0.35s ease-out forwards;
 }
 
 /* ── Pause Breathing ── */
@@ -444,42 +426,73 @@ body {
     border-color: var(--color-border-focus);
 }
 
-/* ── Session History Dots ── */
+/* ── Session Cycle Indicator ── */
 .session-history {
-    position: fixed;
-    bottom: 28px;
-    left: 0;
-    right: 0;
+    position: absolute;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
+    gap: var(--space-md);
+    z-index: 1;
+}
+
+.cycle-counter {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-right: var(--space-md);
+    border-right: 1px solid var(--color-on-fill-subtle);
+}
+
+.cycle-counter__mark {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--color-on-fill-subtle);
+}
+
+.cycle-track {
+    display: flex;
+    align-items: center;
     gap: var(--space-sm);
-    padding: var(--space-md) var(--space-lg) var(--space-md);
 }
 
-.session-dot {
-    font-size: var(--icon-sm);
-    flex-shrink: 0;
+.cycle-slot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition: opacity 0.4s ease;
 }
 
-.session-dot--group-end {
-    margin-right: var(--space-sm);
+.cycle-slot--work,
+.cycle-slot--long {
+    background: var(--color-on-fill);
 }
 
-.session-dot--long-break {
-    margin: 0 var(--space-sm);
+.cycle-slot--break {
+    background: transparent;
+    border: 1px solid var(--color-on-fill);
 }
 
-.session-dot--work,
-.session-dot--break {
-    color: var(--color-on-fill-subtle);
+.cycle-slot--long {
+    width: 18px;
+    border-radius: 4px;
 }
 
-#app[data-mode="work"] .session-dot--active,
-#app[data-mode="break"] .session-dot--active {
-    color: var(--color-on-fill);
-    filter: var(--filter-dot-active);
+.cycle-slot--upcoming,
+.cycle-slot--next {
+    opacity: 0.12;
+}
+
+.cycle-slot--completed {
+    opacity: 0.4;
+}
+
+.cycle-slot--active {
+    opacity: 0.75;
 }
 
 /* ── Keyboard Coachmarks ── */
@@ -491,6 +504,7 @@ body {
     font-family: var(--font-body);
     font-size: var(--text-2xs);
     color: var(--color-hint);
+    text-shadow: 0 1px 2px rgba(var(--rgb-black), 0.2);
     pointer-events: none;
     user-select: none;
 }
@@ -591,10 +605,9 @@ body {
     --color-on-fill-muted: rgba(var(--rgb-black), 0.25);
     --color-on-fill-subtle: rgba(var(--rgb-black), 0.25);
     --color-overlay-border: rgba(var(--rgb-black), 0.08);
-    --color-hint: rgba(var(--rgb-black), 0.2);
-    --color-hint-strong: rgba(var(--rgb-black), 0.3);
+    --color-hint: rgba(var(--rgb-black), 0.35);
+    --color-hint-strong: rgba(var(--rgb-black), 0.5);
     --shadow-timer: 0 1px 8px rgba(var(--rgb-black), 0.1);
-    --filter-dot-active: none;
 }
 
 #app[data-theme="day"] .main::before {

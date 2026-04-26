@@ -168,36 +168,49 @@ function formatTime(seconds) {
     return `${m}:${s}`;
 }
 
+const CYCLE_PATTERN = ['work', 'break', 'work', 'break', 'work', 'break', 'work', 'long'];
+
 function renderDots() {
     sessionHistoryEl.innerHTML = '';
 
-    // Track work sessions to know when we've hit a group of 4
-    let workCount = 0;
-    sessionHistory.forEach((session) => {
-        if (session.type === 'work') workCount++;
-        const dot = document.createElement('i');
-        const isLongBreak = session.type === 'break' && workCount > 0 && workCount % 4 === 0;
-        const iconWeight = isLongBreak ? 'ph-fill' : 'ph';
-        const icon = session.type === 'work' ? 'ph-lightbulb' : 'ph-coffee';
-        dot.className = `${iconWeight} ${icon} session-dot session-dot--${session.type}`;
-
-        if (isLongBreak) dot.classList.add('session-dot--long-break');
-        sessionHistoryEl.appendChild(dot);
-    });
+    const total = sessionHistory.length;
+    const completedCycles = Math.floor(total / CYCLE_PATTERN.length);
+    const positionInCycle = total % CYCLE_PATTERN.length;
 
     const fullDuration = currentMode === 'work' ? workDuration : getBreakDuration();
-    if (isRunning || timeRemaining < fullDuration) {
-        const activeDot = document.createElement('i');
-        const entering = renderDots._activeDotRendered ? '' : ' session-dot--entering';
-        const isActiveLongBreak = currentMode === 'break' && getWorkSessionCount() > 0 && getWorkSessionCount() % 4 === 0;
-        const activeWeight = isActiveLongBreak ? 'ph-fill' : 'ph';
-        const activeIcon = currentMode === 'work' ? 'ph-lightbulb' : 'ph-coffee';
-        activeDot.className = `${activeWeight} ${activeIcon} session-dot session-dot--active${entering}`;
-        sessionHistoryEl.appendChild(activeDot);
-        renderDots._activeDotRendered = true;
-    } else {
-        renderDots._activeDotRendered = false;
+    const hasActive = isRunning || timeRemaining < fullDuration;
+
+    if (completedCycles > 0) {
+        const counter = document.createElement('div');
+        counter.className = 'cycle-counter';
+        counter.setAttribute('aria-label', `${completedCycles} completed cycle${completedCycles > 1 ? 's' : ''}`);
+        for (let i = 0; i < completedCycles; i++) {
+            const mark = document.createElement('span');
+            mark.className = 'cycle-counter__mark';
+            counter.appendChild(mark);
+        }
+        sessionHistoryEl.appendChild(counter);
     }
+
+    const track = document.createElement('div');
+    track.className = 'cycle-track';
+
+    CYCLE_PATTERN.forEach((type, idx) => {
+        const slot = document.createElement('div');
+        slot.className = `cycle-slot cycle-slot--${type}`;
+
+        let state;
+        if (idx < positionInCycle) state = 'completed';
+        else if (idx === positionInCycle && hasActive) state = 'active';
+        else if (idx === positionInCycle && !hasActive) state = 'next';
+        else if (idx === positionInCycle + 1 && hasActive) state = 'next';
+        else state = 'upcoming';
+
+        slot.classList.add(`cycle-slot--${state}`);
+        track.appendChild(slot);
+    });
+
+    sessionHistoryEl.appendChild(track);
 }
 
 function updateTabTitle() {
@@ -251,7 +264,6 @@ function switchMode() {
     sessionHistory.push({ type: currentMode });
     saveHistory();
     currentMode = currentMode === 'work' ? 'break' : 'work';
-    renderDots._activeDotRendered = false;
     timeRemaining = currentMode === 'work' ? workDuration : getBreakDuration();
 
     // Instant refill: skip the grow-back animation, keep color dissolve
