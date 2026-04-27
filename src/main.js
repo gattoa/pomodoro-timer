@@ -1,3 +1,4 @@
+import { initWater } from './water.js';
 import clavesSrc from '../soundfx/claves.wav?url';
 import pauseSrc from '../soundfx/pause.wav?url';
 import resumeSrc from '../soundfx/resume.wav?url';
@@ -70,6 +71,8 @@ const restartBtn = document.getElementById('restart-btn');
 const clearAllBtn = document.getElementById('clear-all-btn');
 const mainEl = document.querySelector('.main');
 const sessionHistoryEl = document.getElementById('session-history');
+const waterCanvas = document.getElementById('water-canvas');
+if (waterCanvas) initWater(waterCanvas, mainEl, app);
 
 let timeRemaining = workDuration;
 let isRunning = false;
@@ -117,34 +120,17 @@ function getHourglassColors() {
     };
 }
 
-function lerpColor(a, b, t) {
-    const r = Math.round(a[0] + (b[0] - a[0]) * t);
-    const g = Math.round(a[1] + (b[1] - a[1]) * t);
-    const bl = Math.round(a[2] + (b[2] - a[2]) * t);
-    return `rgb(${r}, ${g}, ${bl})`;
-}
-
-function hourglassEase(timeRemaining) {
-    // Percentage-based urgency window:
-    //   1. > 15% remaining: calm              (0)
-    //   2. 15% → 5% remaining: ramp to red    (0 → 1.0)
-    //   3. Final 5%: hold at full red          (1.0)
-    const total = currentMode === 'work' ? workDuration : getBreakDuration();
-    const pct = timeRemaining / total;
-    if (pct > 0.15) return 0;
-    if (pct <= 0.05) return 1.0;
-    const t = (0.15 - pct) / 0.10;
-    return t * t;
-}
-
 function updateHourglass() {
+    // Color anchoring lives in water.js — it lerps start→end based on where
+    // the water surface sits relative to UI landmarks (calm above the
+    // start-pause button, locked at the cycle-counter). We just publish the
+    // mode's start and end colors as CSS vars and let the canvas blend.
     const total = currentMode === 'work' ? workDuration : getBreakDuration();
     const pct = timeRemaining / total;
-    const colorProgress = hourglassEase(timeRemaining);
     const colors = getHourglassColors()[currentMode];
-    const color = lerpColor(colors.start, colors.end, colorProgress);
     mainEl.style.setProperty('--fill-pct', pct);
-    mainEl.style.setProperty('--fill-color', color);
+    mainEl.style.setProperty('--fill-color-start', `rgb(${colors.start.join(',')})`);
+    mainEl.style.setProperty('--fill-color-end', `rgb(${colors.end.join(',')})`);
 }
 
 // ── Long Break Logic ──
@@ -325,7 +311,7 @@ function clearAll() {
     workInput.value = 25;
     breakInput.value = 5;
     longBreakInput.value = 15;
-    applyTheme('auto');
+    applyTheme(getResolvedTheme());
     updateDisplay();
 }
 
@@ -461,50 +447,48 @@ muteToggleBtn.addEventListener('click', toggleMute);
 updateMuteUI();
 
 // ── Theme ──
+// Initial theme inherits the OS setting. Clicking the toggle records an
+// explicit override (day/night) which sticks across reloads. While no
+// override is stored, system-preference changes flow through automatically.
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const themeIconSun = document.getElementById('theme-icon-sun');
 const themeIconMoon = document.getElementById('theme-icon-moon');
-const themeIconAuto = document.getElementById('theme-icon-auto');
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-let currentTheme = localStorage.getItem(THEME_KEY) || 'auto';
+function getResolvedTheme() {
+    const stored = localStorage.getItem(THEME_KEY);
+    if (stored === 'day' || stored === 'night') return stored;
+    return prefersDark.matches ? 'night' : 'day';
+}
 
 function applyTheme(mode) {
-    currentTheme = mode;
-    let resolved;
-    if (mode === 'auto') {
-        resolved = prefersDark.matches ? 'night' : 'day';
-    } else {
-        resolved = mode;
-    }
-
-    if (resolved === 'day') {
+    if (mode === 'day') {
         app.dataset.theme = 'day';
     } else {
         delete app.dataset.theme;
     }
 
-    themeIconSun.style.display = mode === 'day' ? '' : 'none';
-    themeIconMoon.style.display = mode === 'night' ? '' : 'none';
-    themeIconAuto.style.display = mode === 'auto' ? '' : 'none';
+    // Show the icon for the *target* — clicking switches to the other mode.
+    themeIconSun.style.display = mode === 'night' ? '' : 'none';
+    themeIconMoon.style.display = mode === 'day' ? '' : 'none';
+    themeToggleBtn.setAttribute('aria-label', mode === 'night' ? 'Switch to day' : 'Switch to night');
 
     updateHourglass();
     updateFavicon();
 }
 
-function cycleTheme() {
-    const order = ['auto', 'day', 'night'];
-    const next = order[(order.indexOf(currentTheme) + 1) % order.length];
+function toggleTheme() {
+    const next = getResolvedTheme() === 'night' ? 'day' : 'night';
     localStorage.setItem(THEME_KEY, next);
     applyTheme(next);
 }
 
-themeToggleBtn.addEventListener('click', cycleTheme);
-prefersDark.addEventListener('change', () => {
-    if (currentTheme === 'auto') applyTheme('auto');
-});
+applyTheme(getResolvedTheme());
 
-applyTheme(currentTheme);
+themeToggleBtn.addEventListener('click', toggleTheme);
+prefersDark.addEventListener('change', () => {
+    if (!localStorage.getItem(THEME_KEY)) applyTheme(getResolvedTheme());
+});
 
 // ── Keyboard Shortcuts ──
 document.addEventListener('keydown', (e) => {
