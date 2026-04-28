@@ -142,6 +142,7 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text);
     min-height: 100vh;
+    min-width: 320px;
     display: flex;
     flex-direction: column;
 }
@@ -164,9 +165,18 @@ body {
 /* ── App Header ── */
 .app-header {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
     padding: var(--space-md) var(--space-lg);
+    position: relative;
+}
+
+.app-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
 }
 
 .app-title {
@@ -189,11 +199,15 @@ body {
     font-size: var(--text-xs);
     color: var(--color-success);
     opacity: 0;
-    transition: opacity 0.3s;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: opacity 0.3s, max-width 0.3s;
 }
 
 .settings-saved-msg--visible {
     opacity: 1;
+    max-width: 80px;
 }
 
 .app-header-right {
@@ -606,5 +620,14 @@ body {
     --color-hint: rgba(var(--rgb-black), 0.35);
     --color-hint-strong: rgba(var(--rgb-black), 0.5);
     --shadow-timer: 0 1px 8px rgba(var(--rgb-black), 0.1);
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+    .coachmarks,
+    .btn-label,
+    #theme-toggle-btn {
+        display: none;
+    }
 }
 
